@@ -157,7 +157,7 @@ def basemenu():
              draw.text((x, top+40),    "Shutdown",  font=font, fill=1) 
              disp.image(image) 
              disp.display()   
-             index = 0
+
 def menuselect(): 
             if index == (va):
                  status()
@@ -237,83 +237,66 @@ def shutdown(): #this will not function unless you start the script as sudo
 #setup the  go to sleep timer
 lcdstart = datetime.now()
 
+#if AUTO_OFF_LCD:
+ #  lcdtmp = lcdstart + timedelta(seconds=30)
+  # if (datetime.now() > lcdtmp):
+   #     draw.rectangle((0,0,width,height), outline=0, fill=0)   
 
-try:
-    while 1:
-#        basemenu()
-        lcdtmp = lcdstart + timedelta(seconds=30)   
-        if (datetime.now() > lcdtmp): 
-            disp.clear()
-            draw.rectangle((0,0,width,height), outline=0, fill=0)            
-            disp.image(image) 
-            disp.display()
-        if GPIO.input(U_pin): # button is released
-            filler = (0)
-        else: # button is pressed:
-            basemenu()
+
+basemenu()
+
+while 1:
+        if not GPIO.input(U_pin): # button is released
             draw.text((x-8, index),       "*",  font=font, fill=0)
             index = (index-8)
-            draw.text((x-8, index),       "*",  font=font, fill=1)
-            disp.image(image) 
-            disp.display()    
-            print("button up")
-            lcdstart = datetime.now()
-        if GPIO.input(L_pin): # button is released
-            latindex = (latindex)
-        else: # button is pressed:
-            latindex =(latindex-1)
-            disp.clear()
-            draw.rectangle((0,0,width,height), outline=0, fill=0)
-            draw.text((x-8, index),       "*",  font=font, fill=1)
             basemenu()
-            lcdstart = datetime.now()
-        if GPIO.input(R_pin): # button is released
-            filler =(0)
-        else: # button is pressed:
+
+
+#            draw.rectangle((0,0,width,height), outline=0, fill=0)            
+#            draw.text((x-8, index),      "*",  font=font, fill=1)
+#            basemenu()
+#        else: # button is pressed:
+            #basemenu()
+            #draw.text((x-8, index),       "*",  font=font, fill=0)
+            #index = (index-8)
+            #draw.text((x-8, index),       "*",  font=font, fill=1)
+        if not GPIO.input(L_pin): # button is released
+            latindex =(latindex-1)
+        if not GPIO.input(R_pin): # button is released
             latindex =(latindex+1)            
             menuselect()
-            lcdstart = datetime.now()
-        if GPIO.input(D_pin): # button is released
-            filler = (0)
-        else: # button is pressed:
-            basemenu() 
-            draw.text((x-8, top),       "*",  font=font, fill=0)
+        if not GPIO.input(D_pin): # button is released
             draw.text((x-8, index),       "*",  font=font, fill=0)
             index = (index +8)
-            draw.text((x-8, index),       "*",  font=font, fill=1)
-            disp.image(image) 
-            disp.display()    
-            print("button down")
-            lcdstart = datetime.now()
-        if GPIO.input(C_pin): # button is released
+            #draw.text((x-8, index),       "*",  font=font, fill=1)
+        if not GPIO.input(C_pin): # button is released
             filler = (0)
-        else: # button is pressed:
+        if not GPIO.input(A_pin): # button is released
             filler = (0)
-        if GPIO.input(A_pin): # button is released
-            filler = (0)
-        else: # button is pressed:
-            disp.clear()
-            disp.display()
-            sys.exit(0)
+       # else: # button is pressed:
+        #    disp.clear()
+         #   disp.display()
+          #  sys.exit(0)
             #disp.display()
-        if GPIO.input(B_pin): # button is released
-            filler = (0)
-        else: # button is pressed:
+        if not GPIO.input(B_pin): # button is released
             menuselect ()
         if not GPIO.input(A_pin) and not GPIO.input(B_pin) and not GPIO.input(C_pin): 
             catImage = Image.open('happycat_oled_64.ppm').convert('1')
             disp.image(catImage)
-        else:
-            filler=(0)         
-#        while GPIO.input(A_pin) and GPIO.input(B_pin) and GPIO.input(C_pin) and GPIO.input(U_pin) and GPIO.input(D_pin) and GPIO.input(L_pin) and GPIO.input(R_pin) :  
-#                 lcdtmp = lcdstart + timedelta(seconds=30)   
-#                 if (datetime.now() > lcdtmp): 
-#                  disp.clear()
-#                  draw.rectangle((0,0,width,height), outline=0, fill=0)            
-#                  disp.image(image) 
-#                  disp.display()
- 
+        if AUTO_OFF_LCD:
+           lcdtmp = lcdstart + timedelta(seconds=30)   
+           if (datetime.now() > lcdtmp): 
+              disp.clear()
+              draw.rectangle((0,0,width,height), outline=0, fill=0)            
+              disp.image(image) 
+              disp.display() 
+              time.sleep(0.25)
+#        else:
+#            #Display image.
+#            disp.image(image) 
+#            disp.display()   
+#            time.sleep(.01) 
 
-except KeyboardInterrupt: 
-    GPIO.cleanup()
 
+#except KeyboardInterrupt: 
+   # GPIO.cleanup()
