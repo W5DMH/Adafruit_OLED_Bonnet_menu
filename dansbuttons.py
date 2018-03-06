@@ -122,13 +122,15 @@ draw = ImageDraw.Draw(image)
 # Draw a black filled box to clear the image.
 draw.rectangle((0,0,width,height), outline=0, fill=0)
 
-#Draw menu items
-#draw.text((x, top),       "System Status",  font=font, fill=1)
-#draw.text((x, top+8),     "Beacon Settings", font=font, fill=1)
-#draw.text((x, top+16),    "Beacon Status",  font=font, fill=1)
-#draw.text((x, top+24),    "Hide Display",  font=font, fill=1) 
-#draw.text((x, top+32),    "Reboot",  font=font, fill=1) 
-#draw.text((x, top+40),    "Shutdown",  font=font, fill=1) 
+def splash():
+             disp.clear()
+             draw.rectangle((0,0,width,height), outline=0, fill=0)
+             draw.text((x, top+16),    "W5DMH PSKBeacon !",  font=font, fill=1)
+             disp.image(image)
+             disp.display()
+             time.sleep(5)
+
+splash()
 
 #turn go to sleep timer on or off 
 AUTO_OFF_LCD = 1
