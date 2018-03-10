@@ -273,19 +273,30 @@ def shutdown(): #this will not function unless you start the script as sudo
        disp.image(image) 
        disp.display()
        os.system("shutdown now -h")
+global run_once
+run_once = 0
+def sleepdisplay(): #put the display to sleep to reduce power
+            global run_once
+            disp.clear()
+            draw.rectangle((0,0,width,height), outline=0, fill=0)            
+            disp.image(image) 
+            disp.display()
+            run_once = 1
+
+
+
 #setup the  go to sleep timer
 lcdstart = datetime.now()
 
 
 try:
     while 1:
-#        basemenu()
+        time.sleep(0.1)
         lcdtmp = lcdstart + timedelta(seconds=30)   
         if (datetime.now() > lcdtmp): 
-            disp.clear()
-            draw.rectangle((0,0,width,height), outline=0, fill=0)            
-            disp.image(image) 
-            disp.display()
+            if run_once == 0:
+               sleepdisplay()
+        time.sleep(0.1)
         if GPIO.input(U_pin): # button is released
             filler = (0)
         else: # button is pressed:
@@ -297,6 +308,7 @@ try:
             disp.display()    
             print("button up")
             lcdstart = datetime.now()
+            run_once = 0
         if GPIO.input(L_pin): # button is released
             latindex = (latindex)
         else: # button is pressed:
@@ -306,12 +318,14 @@ try:
             draw.text((x-8, index),       "*",  font=font, fill=1)
             basemenu()
             lcdstart = datetime.now()
+            run_once = 0
         if GPIO.input(R_pin): # button is released
             filler =(0)
         else: # button is pressed:
             latindex =(latindex+1)            
             menuselect()
             lcdstart = datetime.now()
+            run_once = 0
         if GPIO.input(D_pin): # button is released
             filler = (0)
         else: # button is pressed:
@@ -324,6 +338,7 @@ try:
             disp.display()    
             print("button down")
             lcdstart = datetime.now()
+            run_once = 0
         if GPIO.input(C_pin): # button is released
             filler = (0)
         else: # button is pressed:
